@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.env.local
+server/.env
+client/.env
+.sites-runtime/
+*.zip
