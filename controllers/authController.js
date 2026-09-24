@@ -10,26 +10,12 @@ const safe = (user) => ({
   role: user.role,
 });
 
-const options = () => {
-  const production = process.env.NODE_ENV === "production";
-
-  return {
-    httpOnly: true,
-    secure: production,
-    sameSite: production ? "none" : "lax",
-    maxAge: 7 * 86400000,
-    path: "/",
-  };
-};
-
 function session(res, user) {
-  res.cookie(
-    "uc_token",
-    jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" }),
-    options(),
-  );
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
 
-  return res.json({ user: safe(user) });
+  return res.json({ user: safe(user), token });
 }
 
 export async function register(req, res) {
@@ -61,7 +47,6 @@ export async function login(req, res) {
 }
 
 export function logout(req, res) {
-  res.clearCookie("uc_token", { ...options(), maxAge: undefined });
   return res.json({ message: "Signed out" });
 }
 
