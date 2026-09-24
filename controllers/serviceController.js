@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import Service from "../models/Service.js";
-import { categories, cities } from "../../shared/catalog.js";
+import { categories, cities } from "../shared/catalog.js";
 import { getCloudinary } from "../config/cloudinary.js";
 
 const boolFromForm = z.preprocess(

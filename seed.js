@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { connectDB } from "./config/db.js";
 import Service from "./models/Service.js";
 import User from "./models/User.js";
-import { services } from "../shared/catalog.js";
+import { services } from "./shared/catalog.js";
 dotenv.config({ path: fileURLToPath(new URL(".env", import.meta.url)) });
 try {
   await connectDB();

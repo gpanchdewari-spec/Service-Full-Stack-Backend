@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { cities, slots } from "../../shared/catalog.js";
+import { cities, slots } from "../shared/catalog.js";
 export const registerSchema = z.object({
   name: z.string().trim().min(2).max(80),
   email: z
