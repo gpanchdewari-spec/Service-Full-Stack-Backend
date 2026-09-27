@@ -84,33 +84,42 @@ export async function all(req, res) {
 }
 
 export async function status(req, res) {
-  const { status } = z
-    .object({
-      status: z.enum(["Confirmed", "Completed", "Cancelled"]),
-    })
-    .parse(req.body);
+  const { status } = req.body;
 
-  const allowed =
-    status === "Confirmed"
-      ? ["Pending"]
-      : status === "Completed"
-        ? ["Confirmed"]
-        : ["Pending", "Confirmed"];
+  const allowedStatuses = [
+    "Pending",
+    "Confirmed",
+    "Assigned",
+    "OnTheWay",
+    "InProgress",
+    "Completed",
+    "Cancelled",
+  ];
 
-  const booking = await Booking.findOneAndUpdate(
-    {
-      _id: req.params.id,
-      status: { $in: allowed },
-    },
-    { status },
-    { new: true },
-  );
-
-  if (!booking) {
-    return res.status(409).json({
-      message: "This status transition is not allowed.",
+  if (!allowedStatuses.includes(status)) {
+    return res.status(400).json({
+      message: `Invalid status: ${status}`,
+      allowedStatuses,
     });
   }
 
-  res.json({ booking });
+  const booking = await Booking.findByIdAndUpdate(
+    req.params.id,
+    { $set: { status } },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  if (!booking) {
+    return res.status(404).json({
+      message: "Booking not found.",
+    });
+  }
+
+  return res.json({
+    success: true,
+    booking,
+  });
 }
