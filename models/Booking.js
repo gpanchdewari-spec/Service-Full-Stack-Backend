@@ -19,7 +19,15 @@ const schema = new mongoose.Schema(
     slot: String,
     status: {
       type: String,
-      enum: ["Pending", "Confirmed", "Completed", "Cancelled"],
+      enum: [
+        "Pending",
+        "Confirmed",
+        "Assigned",
+        "OnTheWay",
+        "InProgress",
+        "Completed",
+        "Cancelled",
+      ],
       default: "Pending",
     },
     paymentMethod: { type: String, default: "Pay after service" },
