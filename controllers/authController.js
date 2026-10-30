@@ -12,7 +12,7 @@ const safe = (user) => ({
 
 function session(res, user) {
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "7d",
   });
 
   return res.json({ user: safe(user), token });

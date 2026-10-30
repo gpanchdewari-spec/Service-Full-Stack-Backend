@@ -146,3 +146,30 @@ export async function update(req, res) {
 
   res.json({ service });
 }
+
+
+// Admin: delete existing service
+export async function remove(req, res) {
+  const service = await Service.findById(req.params.id);
+
+  if (!service) {
+    return res.status(404).json({
+      message: "Service not found",
+    });
+  }
+
+  const publicId = service.imagePublicId;
+
+  // Delete service from MongoDB
+  await Service.findByIdAndDelete(req.params.id);
+
+  // Delete associated image from Cloudinary
+  if (publicId) {
+    await deleteUploadedImage(publicId);
+  }
+
+  res.json({
+    success: true,
+    message: "Service deleted successfully",
+  });
+}

@@ -80,4 +80,11 @@ router.patch(
   wrap(services.update),
 );
 
+// Delete service by admin
+router.delete(
+  "/admin/services/:id",
+  protect,
+  admin,
+  wrap(services.remove),
+);
 export default router;
